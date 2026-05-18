@@ -1,26 +1,157 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --container-margin: 24px;
+  --ideal-width: 1430px;
+  --card-radius: 12px;
+  --btn-radius: 200px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@media (min-width: 768px) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --container-margin: 48px;
   }
 }
 
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Smooth anchor transitions */
+a {
+  text-decoration: none;
+}
+
+/* Nav underline slide animation */
+@keyframes nav-underline {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+/* ── Kikkerland-matched typography ── */
+:root {
+  /* Body — Inter 400, 16px mobile / 18px desktop */
+  --body-weight:         400;
+  --body-line-height:    1.6;
+  --body-letter-spacing: 0.02em;
+
+  /* Headings — Inter 700 */
+  --heading-weight:         700;
+  --heading-line-height:    1.2;
+  --heading-letter-spacing: 0.06em;
+
+  /* Announcement bar */
+  --announce-size:           13px;
+  --announce-weight:         700;
+  --announce-letter-spacing: 0.02em;
+
+  /* Nav row (second row desktop) */
+  --nav-size:           16px;
+  --nav-weight:         400;
+  --nav-letter-spacing: 0.02em;
+  --nav-line-height:    1.6;
+
+  /* Buttons */
+  --btn-font-size:           15px;
+  --btn-font-weight:         700;
+  --btn-letter-spacing:      0.06em;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter, 'Inter', sans-serif);
+  font-size: 16px;
+  font-weight: var(--body-weight);
+  line-height: var(--body-line-height);
+  letter-spacing: var(--body-letter-spacing);
+  color: #000;
+  background: #fff;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@media (min-width: 768px) {
+  body { font-size: 18px; }
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-inter, 'Inter', sans-serif);
+  font-weight: var(--heading-weight);
+  line-height: var(--heading-line-height);
+  letter-spacing: var(--heading-letter-spacing);
+  word-break: break-word;
+}
+
+.container-site {
+  width: 100%;
+  max-width: var(--ideal-width);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--container-margin);
+  padding-right: var(--container-margin);
+}
+
+/* Visually hidden but accessible */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Cart badge bounce */
+@keyframes cart-pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.4); }
+  100% { transform: scale(1); }
+}
+
+.cart-pop {
+  animation: cart-pop 0.25s ease;
+}
+
+/* Drawer slide-in from right */
+@keyframes slide-in-right {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+@keyframes slide-in-left {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+
+.slide-in-right {
+  animation: slide-in-right 0.3s ease;
+}
+
+.slide-in-left {
+  animation: slide-in-left 0.3s ease;
+}
+
+/* Fade in overlay */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.fade-in {
+  animation: fade-in 0.2s ease;
+}
+
+/* Line clamp utilities */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
