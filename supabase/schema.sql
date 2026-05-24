@@ -275,3 +275,52 @@ insert into categories (name, slug, sort_order) values
   ('Cool Tools',     'cool-tools',   9),
   ('Gifts',          'gifts',       10)
 on conflict (slug) do nothing;
+
+-- ========================
+-- SEED DATA — Test Products
+-- ========================
+with cat_play as (select id from categories where slug = 'play'),
+     cat_kitchen as (select id from categories where slug = 'kitchen'),
+     cat_home as (select id from categories where slug = 'home')
+insert into products (title, slug, description, price, compare_at_price, category_id, tags, is_active, is_featured, stock_quantity)
+values
+  ('Robin 3D Puzzle',
+   'robin-3d-puzzle',
+   'A beautiful 3D puzzle featuring a cheerful robin. Great for all ages and skill levels. Assembles into a stunning decorative piece.',
+   1800, null,
+   (select id from cat_play),
+   array['new','play','puzzle'], true, true, 42),
+  ('Bike Bell — Juicy Jingles',
+   'bike-bell-juicy-jingles',
+   'Fruit-shaped bike bells that ring loud and look absolutely delightful. Available in strawberry, lemon, and watermelon.',
+   1200, 1500,
+   (select id from cat_play),
+   array['new','on-the-go'], true, true, 18),
+  ('Golf Wine Aerator',
+   'golf-wine-aerator',
+   'Aerate your wine in style with this golf ball-shaped wine aerator. A hole-in-one gift for wine lovers.',
+   1600, null,
+   (select id from cat_kitchen),
+   array['kitchen','bar','gifts'], true, true, 55),
+  ('Magnetic Hourglass',
+   'magnetic-hourglass',
+   'Watch magnetic sand flow in beautiful patterns inside this elegant hourglass. A mesmerizing desk companion.',
+   3200, null,
+   (select id from cat_home),
+   array['home','decor','desk'], true, true, 8)
+on conflict (slug) do nothing;
+
+-- Seed product images
+insert into product_images (product_id, url, alt, sort_order)
+select p.id,
+       case p.slug
+         when 'robin-3d-puzzle'       then 'https://images.unsplash.com/photo-1606092195730-5d7b9af1eef4?w=600&q=80'
+         when 'bike-bell-juicy-jingles' then 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80'
+         when 'golf-wine-aerator'     then 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=600&q=80'
+         when 'magnetic-hourglass'    then 'https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?w=600&q=80'
+       end as url,
+       p.title as alt,
+       0 as sort_order
+from products p
+where p.slug in ('robin-3d-puzzle','bike-bell-juicy-jingles','golf-wine-aerator','magnetic-hourglass')
+  and not exists (select 1 from product_images pi where pi.product_id = p.id);
