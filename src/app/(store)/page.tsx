@@ -1,12 +1,40 @@
+import { getProducts } from "@/lib/products";
+import { getHeroSettings } from "@/lib/settings";
+import { HeroBanner } from "@/components/home/HeroBanner";
+import { ProductGrid } from "@/components/product/ProductGrid";
 import { CategoryGrid } from "@/components/home/CategoryGrid";
-import { HomePageClient, BestSellersClient } from "@/components/home/HomePageClient";
 
 const CATEGORY_TILES = [
-  { name: "Play",     href: "/collections/play",    imageSrc: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80" },
-  { name: "Home",     href: "/collections/home",    imageSrc: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&q=80" },
-  { name: "Kitchen",  href: "/collections/kitchen", imageSrc: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&q=80" },
-  { name: "Wellness", href: "/collections/wellness",imageSrc: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=600&q=80" },
-  { name: "Tech",     href: "/collections/tech",    imageSrc: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=600&q=80" },
+  {
+    name: "Play",
+    href: "/collections/play",
+    imageSrc:
+      "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80",
+  },
+  {
+    name: "Home",
+    href: "/collections/home",
+    imageSrc:
+      "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&q=80",
+  },
+  {
+    name: "Kitchen",
+    href: "/collections/kitchen",
+    imageSrc:
+      "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&q=80",
+  },
+  {
+    name: "Wellness",
+    href: "/collections/wellness",
+    imageSrc:
+      "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=600&q=80",
+  },
+  {
+    name: "Tech",
+    href: "/collections/tech",
+    imageSrc:
+      "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=600&q=80",
+  },
 ];
 
 const VALUE_PROPS = [
@@ -27,17 +55,39 @@ const VALUE_PROPS = [
   },
 ];
 
-export default function HomePage() {
+export default async function HomePage() {
+  const [newArrivals, bestSellers, hero] = await Promise.all([
+    getProducts({ tag: "new", limit: 8 }),
+    getProducts({ featured: true, limit: 8 }),
+    getHeroSettings(),
+  ]);
+
   return (
     <>
-      {/* Hero + New Arrivals — reads from admin store */}
-      <HomePageClient />
+      <HeroBanner
+        title={hero.title}
+        subtitle={hero.subtitle}
+        ctaLabel={hero.ctaLabel}
+        ctaHref={hero.ctaHref}
+        imageSrc={hero.imageSrc}
+        overlayOpacity={hero.overlayOpacity}
+      />
 
-      {/* Category tiles */}
+      <ProductGrid
+        products={newArrivals}
+        title="New Arrivals"
+        viewAllHref="/collections/new"
+        columns={4}
+      />
+
       <CategoryGrid title="Shop by Category" categories={CATEGORY_TILES} />
 
-      {/* Best Sellers — reads from admin store */}
-      <BestSellersClient />
+      <ProductGrid
+        products={bestSellers}
+        title="Best Sellers"
+        viewAllHref="/collections/best-sellers"
+        columns={4}
+      />
 
       {/* Value props */}
       <section className="py-14 md:py-20 border-t border-gray-100">
@@ -58,7 +108,10 @@ export default function HomePage() {
                   >
                     {prop.title}
                   </h3>
-                  <p className="text-gray-500 leading-relaxed" style={{ fontSize: "14px" }}>
+                  <p
+                    className="text-gray-500 leading-relaxed"
+                    style={{ fontSize: "14px" }}
+                  >
                     {prop.body}
                   </p>
                 </div>

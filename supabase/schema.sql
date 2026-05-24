@@ -239,6 +239,28 @@ create policy "Anyone can subscribe"
   on newsletter_subscribers for insert with check (true);
 
 -- ========================
+-- SITE SETTINGS
+-- ========================
+create table if not exists site_settings (
+  key        text primary key,
+  value      jsonb not null,
+  updated_at timestamptz not null default now()
+);
+alter table site_settings enable row level security;
+create policy "Public read site_settings" on site_settings for select using (true);
+
+-- Add customer info to orders (for guest checkout)
+alter table orders add column if not exists customer_name  text;
+alter table orders add column if not exists customer_email text;
+
+-- Seed site_settings
+insert into site_settings (key, value) values
+  ('hero', '{"title":"New Arrivals","subtitle":"Explore our latest collection of playful, functional, and beautifully designed products.","ctaLabel":"Shop New Arrivals","ctaHref":"/collections/new","imageSrc":"https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=1400&q=80","overlayOpacity":0.32}'),
+  ('announcement', '{"messages":["Free Shipping on Orders Over $35","New Arrivals — Shop the Latest Collection :)","Designed with Love, Made to Last"],"speed":3000}'),
+  ('site', '{"siteName":"Gaugau","siteTagline":"Playful, functional, beautifully designed.","freeShippingThreshold":3500}')
+on conflict (key) do nothing;
+
+-- ========================
 -- SEED DATA — Categories
 -- ========================
 insert into categories (name, slug, sort_order) values

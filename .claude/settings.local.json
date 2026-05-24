@@ -18,7 +18,18 @@
       "Bash(vercel whoami *)",
       "Bash(git init *)",
       "Bash(git add *)",
-      "Bash(git commit *)"
+      "Bash(git commit *)",
+      "Bash(vercel deploy *)",
+      "Bash(git config *)",
+      "Bash(git credential-manager *)",
+      "Bash(git credential *)",
+      "Bash(where gh *)",
+      "Bash(\"C:\\\\Program Files\\\\GitHub CLI\\\\gh.exe\" auth status)",
+      "Bash(\"C:\\\\Program Files\\\\GitHub CLI\\\\gh.exe\" repo create gaugau --public --source=. --remote=origin --push)",
+      "Bash(vercel link *)",
+      "Bash(\"C:\\\\Program Files\\\\GitHub CLI\\\\gh.exe\" auth status --hostname github.com)",
+      "Bash(git remote *)",
+      "Bash(\"C:\\\\Program Files\\\\GitHub CLI\\\\gh.exe\" auth login --web --hostname github.com)"
     ]
   }
 }

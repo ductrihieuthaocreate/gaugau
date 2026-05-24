@@ -1,19 +1,22 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useAdminStore } from "@/store/adminStore";
 
-export function AnnouncementBar() {
-  const messages = useAdminStore((s) => s.settings.announcementMessages);
-  const speed = useAdminStore((s) => s.settings.announcementSpeed);
+interface Props {
+  messages: string[];
+  speed: number;
+}
+
+export function AnnouncementBar({ messages, speed }: Props) {
   const [current, setCurrent] = useState(0);
 
   useEffect(() => {
     if (messages.length <= 1) return;
-    const timer = setInterval(() => {
-      setCurrent((prev) => (prev + 1) % messages.length);
-    }, speed);
-    return () => clearInterval(timer);
+    const t = setInterval(
+      () => setCurrent((p) => (p + 1) % messages.length),
+      speed
+    );
+    return () => clearInterval(t);
   }, [messages.length, speed]);
 
   return (
@@ -25,7 +28,9 @@ export function AnnouncementBar() {
         letterSpacing: "var(--announce-letter-spacing)",
       }}
     >
-      <div className="transition-opacity duration-500">{messages[current] ?? ""}</div>
+      <div className="transition-opacity duration-500">
+        {messages[current] ?? ""}
+      </div>
     </div>
   );
 }

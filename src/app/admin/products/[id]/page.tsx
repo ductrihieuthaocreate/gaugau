@@ -1,33 +1,38 @@
-"use client";
-
-import { use } from "react";
-import { useRouter } from "next/navigation";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { notFound } from "next/navigation";
-import { useAdminStore } from "@/store/adminStore";
-import { ProductForm } from "@/components/admin/ProductForm";
+import { EditProductClient } from "@/components/admin/EditProductClient";
+import type { Product, Category } from "@/types";
 
-export default function EditProductPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = use(params);
-  const { products, categories, updateProduct } = useAdminStore();
-  const router = useRouter();
+interface Props {
+  params: Promise<{ id: string }>;
+}
 
-  const product = products.find((p) => p.id === id);
-  if (!product) return notFound();
+export default async function EditProductPage({ params }: Props) {
+  const { id } = await params;
+  const supabase = createAdminClient();
+
+  const [{ data: product }, { data: categories }] = await Promise.all([
+    supabase
+      .from("products")
+      .select("*, images:product_images(*), category:categories(*)")
+      .eq("id", id)
+      .single(),
+    supabase.from("categories").select("*").order("sort_order"),
+  ]);
+
+  if (!product) notFound();
 
   return (
     <div className="max-w-3xl">
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-gray-900">Edit Product</h1>
-        <p className="text-gray-500 text-sm mt-0.5 font-mono">{product.slug}</p>
+        <p className="text-gray-500 text-sm mt-0.5 font-mono">
+          {(product as Product).slug}
+        </p>
       </div>
-      <ProductForm
-        initialData={product}
-        categories={categories}
-        onSave={(data) => {
-          updateProduct(id, data);
-          router.push("/admin/products");
-        }}
-        onCancel={() => router.push("/admin/products")}
+      <EditProductClient
+        product={product as Product}
+        categories={(categories as Category[]) ?? []}
       />
     </div>
   );
