@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { createAdminClient } from "@/lib/supabase/admin";
 import Link from "next/link";
 import { Package, ShoppingBag, Tag, TrendingUp, AlertCircle } from "lucide-react";
