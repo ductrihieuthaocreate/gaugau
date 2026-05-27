@@ -110,8 +110,7 @@ export function ProductCard({ product }: Props) {
                   addItem(product);
                 }}
                 className="w-full text-white text-[12px] font-bold py-2.5 flex items-center justify-center gap-1.5 hover:opacity-90 transition-opacity"
-                style={{ borderRadius: "4px" }}
-                style={{ background: "var(--brand)", letterSpacing: "var(--btn-letter-spacing)" }}
+                style={{ borderRadius: "4px", background: "var(--brand)", letterSpacing: "var(--btn-letter-spacing)" }}
               >
                 <ShoppingBag size={13} strokeWidth={2} />
                 Add to Cart
