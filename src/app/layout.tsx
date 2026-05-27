@@ -11,8 +11,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Gaugau — Unique Gifts & Design",
-  description: "Discover playful, functional, and beautifully designed products for home, kitchen, wellness, and more.",
+  title: "Go2go — Your Go-To for Design Gifts",
+  description: "Shop curated design gifts and lifestyle products for home, kitchen, play, and more. Free shipping on orders over $35.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

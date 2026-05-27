@@ -21,8 +21,9 @@ export function AnnouncementBar({ messages, speed }: Props) {
 
   return (
     <div
-      className="bg-black text-white text-center py-2 px-4 overflow-hidden"
+      className="text-white text-center py-2 px-4 overflow-hidden"
       style={{
+        background: "var(--brand)",
         fontSize: "var(--announce-size)",
         fontWeight: "var(--announce-weight)",
         letterSpacing: "var(--announce-letter-spacing)",

@@ -2,9 +2,16 @@
 
 :root {
   --container-margin: 24px;
-  --ideal-width: 1430px;
-  --card-radius: 12px;
+  --ideal-width: 1440px;
+  --card-radius: 8px;
   --btn-radius: 200px;
+
+  /* Brand */
+  --brand:       #6D28D9;
+  --brand-dark:  #5B21B6;
+  --brand-light: #EDE9FE;
+  --sale:        #DC2626;
+  --sale-dark:   #B91C1C;
 }
 
 @media (min-width: 768px) {
@@ -13,69 +20,52 @@
   }
 }
 
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
 }
 
-/* Smooth anchor transitions */
-a {
-  text-decoration: none;
-}
+a { text-decoration: none; }
 
-/* Nav underline slide animation */
-@keyframes nav-underline {
-  from { transform: scaleX(0); }
-  to   { transform: scaleX(1); }
-}
-
-/* ── Kikkerland-matched typography ── */
 :root {
-  /* Body — Inter 400, 16px mobile / 18px desktop */
   --body-weight:         400;
   --body-line-height:    1.6;
-  --body-letter-spacing: 0.02em;
+  --body-letter-spacing: 0.01em;
 
-  /* Headings — Inter 700 */
   --heading-weight:         700;
   --heading-line-height:    1.2;
-  --heading-letter-spacing: 0.06em;
+  --heading-letter-spacing: 0.01em;
 
-  /* Announcement bar */
   --announce-size:           13px;
-  --announce-weight:         700;
+  --announce-weight:         500;
   --announce-letter-spacing: 0.02em;
 
-  /* Nav row (second row desktop) */
-  --nav-size:           16px;
-  --nav-weight:         400;
-  --nav-letter-spacing: 0.02em;
-  --nav-line-height:    1.6;
+  --nav-size:           14px;
+  --nav-weight:         500;
+  --nav-letter-spacing: 0.01em;
+  --nav-line-height:    1.5;
 
-  /* Buttons */
-  --btn-font-size:           15px;
-  --btn-font-weight:         700;
-  --btn-letter-spacing:      0.06em;
+  --btn-font-size:      14px;
+  --btn-font-weight:    700;
+  --btn-letter-spacing: 0.04em;
 }
 
 body {
   font-family: var(--font-inter, 'Inter', sans-serif);
-  font-size: 16px;
+  font-size: 15px;
   font-weight: var(--body-weight);
   line-height: var(--body-line-height);
   letter-spacing: var(--body-letter-spacing);
-  color: #000;
+  color: #1F2937;
   background: #fff;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 @media (min-width: 768px) {
-  body { font-size: 18px; }
+  body { font-size: 16px; }
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -84,6 +74,7 @@ h1, h2, h3, h4, h5, h6 {
   line-height: var(--heading-line-height);
   letter-spacing: var(--heading-letter-spacing);
   word-break: break-word;
+  color: #111827;
 }
 
 .container-site {
@@ -95,7 +86,6 @@ h1, h2, h3, h4, h5, h6 {
   padding-right: var(--container-margin);
 }
 
-/* Visually hidden but accessible */
 .sr-only {
   position: absolute;
   width: 1px;
@@ -108,47 +98,30 @@ h1, h2, h3, h4, h5, h6 {
   border-width: 0;
 }
 
-/* Cart badge bounce */
 @keyframes cart-pop {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.4); }
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.4); }
   100% { transform: scale(1); }
 }
+.cart-pop { animation: cart-pop 0.25s ease; }
 
-.cart-pop {
-  animation: cart-pop 0.25s ease;
-}
-
-/* Drawer slide-in from right */
 @keyframes slide-in-right {
   from { transform: translateX(100%); }
-  to { transform: translateX(0); }
+  to   { transform: translateX(0); }
 }
-
 @keyframes slide-in-left {
   from { transform: translateX(-100%); }
-  to { transform: translateX(0); }
+  to   { transform: translateX(0); }
 }
+.slide-in-right { animation: slide-in-right 0.3s ease; }
+.slide-in-left  { animation: slide-in-left 0.3s ease; }
 
-.slide-in-right {
-  animation: slide-in-right 0.3s ease;
-}
-
-.slide-in-left {
-  animation: slide-in-left 0.3s ease;
-}
-
-/* Fade in overlay */
 @keyframes fade-in {
   from { opacity: 0; }
-  to { opacity: 1; }
+  to   { opacity: 1; }
 }
+.fade-in { animation: fade-in 0.2s ease; }
 
-.fade-in {
-  animation: fade-in 0.2s ease;
-}
-
-/* Line clamp utilities */
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;

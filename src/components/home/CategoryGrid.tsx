@@ -15,15 +15,10 @@ interface Props {
 
 export function CategoryGrid({ title, categories }: Props) {
   return (
-    <section className="py-12 md:py-16 bg-[#f8f8f8]">
+    <section className="py-10 md:py-14">
       {title && (
-        <div className="container-site mb-8">
-          <div>
-            <h2 className="text-2xl md:text-[28px] font-bold tracking-tight leading-tight">
-              {title}
-            </h2>
-            <div className="mt-2 w-10 h-[3px] bg-black rounded-full" />
-          </div>
+        <div className="container-site mb-6">
+          <h2 className="text-xl md:text-2xl font-bold text-gray-900">{title}</h2>
         </div>
       )}
       <div className="container-site">
@@ -32,25 +27,22 @@ export function CategoryGrid({ title, categories }: Props) {
             <Link
               key={cat.name}
               href={cat.href}
-              className="group relative aspect-square overflow-hidden rounded-3xl bg-[#e8e8e8]"
+              className="group flex flex-col items-center gap-2"
             >
-              <Image
-                src={cat.imageSrc}
-                alt={cat.imageAlt || cat.name}
-                fill
-                className="object-cover transition-transform duration-500 ease-out group-hover:scale-110"
-                sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 20vw"
-              />
-
-              {/* Gradient overlay — stronger at bottom */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent transition-opacity duration-300 group-hover:from-black/70" />
-
-              {/* Label */}
-              <div className="absolute inset-0 flex items-end p-4">
-                <span className="text-white font-bold text-sm uppercase tracking-[0.12em] leading-tight drop-shadow-sm">
-                  {cat.name}
-                </span>
+              {/* Square image tile — Wayfair-style subtle hover ring */}
+              <div className="relative w-full aspect-square overflow-hidden rounded-xl bg-gray-100 ring-2 ring-transparent group-hover:ring-[var(--brand)] transition-all duration-200">
+                <Image
+                  src={cat.imageSrc}
+                  alt={cat.imageAlt || cat.name}
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 20vw"
+                />
               </div>
+              {/* Label below image — Wayfair-style */}
+              <span className="text-[13px] font-semibold text-gray-800 group-hover:text-[var(--brand)] transition-colors text-center leading-tight">
+                {cat.name}
+              </span>
             </Link>
           ))}
         </div>

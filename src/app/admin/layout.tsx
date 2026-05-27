@@ -17,7 +17,7 @@ const NAV = [
 ];
 
 const ADMIN_PASSWORD = "admin123";
-const AUTH_KEY = "gaugau-admin-auth";
+const AUTH_KEY = "go2go-admin-auth";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const [authed, setAuthed] = useState(false);
@@ -52,8 +52,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <div className="min-h-screen bg-[#0f0f0f] flex items-center justify-center px-4">
         <div className="w-full max-w-sm">
           <div className="text-center mb-8">
-            <div className="inline-flex items-center bg-[#e63329] rounded-sm px-3 py-1.5 mb-4">
-              <span className="text-white font-extrabold text-sm tracking-[0.1em] uppercase">GAUGAU</span>
+            <div className="inline-flex items-center bg-[#6D28D9] rounded-sm px-3 py-1.5 mb-4">
+              <span className="text-white font-extrabold text-sm tracking-[0.1em] uppercase">GO2GO</span>
             </div>
             <h1 className="text-white text-xl font-bold">Admin Panel</h1>
             <p className="text-gray-500 text-sm mt-1">Sign in to manage your store</p>
@@ -99,8 +99,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           {/* Logo */}
           <div className="flex items-center justify-between px-5 h-16 border-b border-white/8 shrink-0">
             <Link href="/" target="_blank" className="flex items-center gap-2.5 group">
-              <div className="bg-[#e63329] rounded-sm px-2 py-1">
-                <span className="text-white font-extrabold text-[11px] tracking-[0.1em] uppercase">GG</span>
+              <div className="bg-[#6D28D9] rounded-sm px-2 py-1">
+                <span className="text-white font-extrabold text-[11px] tracking-[0.1em] uppercase">G2</span>
               </div>
               <span className="text-white font-bold text-sm">Admin</span>
             </Link>
