@@ -30,7 +30,7 @@ export function CategoryGrid({ title, categories }: Props) {
               className="group flex flex-col items-center gap-2"
             >
               {/* Square image tile — Wayfair-style subtle hover ring */}
-              <div className="relative w-full aspect-square overflow-hidden rounded-xl bg-gray-100 ring-2 ring-transparent group-hover:ring-[var(--brand)] transition-all duration-200">
+              <div className="relative w-full aspect-square overflow-hidden bg-gray-100 transition-opacity duration-200 group-hover:opacity-90" style={{ borderRadius: "4px" }}>
                 <Image
                   src={cat.imageSrc}
                   alt={cat.imageAlt || cat.name}

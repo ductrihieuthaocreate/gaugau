@@ -48,13 +48,6 @@ export function HeroBanner({
         style={{ minHeight: "520px" }}
       >
         <div className="max-w-lg py-24">
-          <p
-            className="text-white/70 font-bold uppercase mb-4"
-            style={{ fontSize: "12px", letterSpacing: "0.25em" }}
-          >
-            Spring 2026 Collection
-          </p>
-
           <h1 className="text-white font-bold leading-[1.1] mb-5"
             style={{ fontSize: "clamp(2.4rem, 5vw, 4rem)", letterSpacing: "-0.01em" }}
           >
@@ -69,11 +62,10 @@ export function HeroBanner({
 
           <Link
             href={ctaHref}
-            className="inline-flex items-center gap-2 bg-white text-black font-bold px-8 py-4 rounded-full hover:bg-gray-100 active:scale-95 transition-all duration-200"
-            style={{ fontSize: "14px", letterSpacing: "0.06em" }}
+            className="inline-flex items-center gap-2 bg-white text-black font-bold px-8 py-4 hover:bg-gray-100 transition-colors"
+            style={{ fontSize: "14px", borderRadius: "4px" }}
           >
             {ctaLabel}
-            <span className="text-base leading-none">→</span>
           </Link>
         </div>
       </div>

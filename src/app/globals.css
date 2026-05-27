@@ -1,23 +1,25 @@
 @import "tailwindcss";
 
 :root {
-  --container-margin: 24px;
+  --container-margin: 16px;
   --ideal-width: 1440px;
-  --card-radius: 8px;
-  --btn-radius: 200px;
+  --card-radius: 4px;
+  --btn-radius: 4px;
 
-  /* Brand */
-  --brand:       #6D28D9;
-  --brand-dark:  #5B21B6;
-  --brand-light: #EDE9FE;
-  --sale:        #DC2626;
-  --sale-dark:   #B91C1C;
+  /* Wayfair brand purple */
+  --brand:       #7B189F;
+  --brand-dark:  #5c1278;
+  --brand-light: #f5eafa;
+  --sale:        #D4232A;
+  --sale-dark:   #b01c21;
 }
 
-@media (min-width: 768px) {
-  :root {
-    --container-margin: 48px;
-  }
+@media (min-width: 640px) {
+  :root { --container-margin: 24px; }
+}
+
+@media (min-width: 1024px) {
+  :root { --container-margin: 40px; }
 }
 
 * { box-sizing: border-box; }
@@ -31,50 +33,44 @@ a { text-decoration: none; }
 
 :root {
   --body-weight:         400;
-  --body-line-height:    1.6;
-  --body-letter-spacing: 0.01em;
+  --body-line-height:    1.5;
+  --body-letter-spacing: 0em;
 
   --heading-weight:         700;
   --heading-line-height:    1.2;
-  --heading-letter-spacing: 0.01em;
+  --heading-letter-spacing: -0.01em;
 
-  --announce-size:           13px;
-  --announce-weight:         500;
-  --announce-letter-spacing: 0.02em;
-
-  --nav-size:           14px;
+  --nav-size:           13px;
   --nav-weight:         500;
-  --nav-letter-spacing: 0.01em;
-  --nav-line-height:    1.5;
+  --nav-letter-spacing: 0em;
 
   --btn-font-size:      14px;
   --btn-font-weight:    700;
-  --btn-letter-spacing: 0.04em;
+  --btn-letter-spacing: 0em;
 }
 
 body {
-  font-family: var(--font-inter, 'Inter', sans-serif);
-  font-size: 15px;
+  font-family: var(--font-inter, 'Inter', system-ui, sans-serif);
+  font-size: 14px;
   font-weight: var(--body-weight);
   line-height: var(--body-line-height);
   letter-spacing: var(--body-letter-spacing);
-  color: #1F2937;
+  color: #212121;
   background: #fff;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 @media (min-width: 768px) {
-  body { font-size: 16px; }
+  body { font-size: 15px; }
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-inter, 'Inter', sans-serif);
+  font-family: var(--font-inter, 'Inter', system-ui, sans-serif);
   font-weight: var(--heading-weight);
   line-height: var(--heading-line-height);
   letter-spacing: var(--heading-letter-spacing);
-  word-break: break-word;
-  color: #111827;
+  color: #212121;
 }
 
 .container-site {
@@ -100,10 +96,10 @@ h1, h2, h3, h4, h5, h6 {
 
 @keyframes cart-pop {
   0%   { transform: scale(1); }
-  50%  { transform: scale(1.4); }
+  50%  { transform: scale(1.35); }
   100% { transform: scale(1); }
 }
-.cart-pop { animation: cart-pop 0.25s ease; }
+.cart-pop { animation: cart-pop 0.2s ease; }
 
 @keyframes slide-in-right {
   from { transform: translateX(100%); }
@@ -113,8 +109,8 @@ h1, h2, h3, h4, h5, h6 {
   from { transform: translateX(-100%); }
   to   { transform: translateX(0); }
 }
-.slide-in-right { animation: slide-in-right 0.3s ease; }
-.slide-in-left  { animation: slide-in-left 0.3s ease; }
+.slide-in-right { animation: slide-in-right 0.28s ease; }
+.slide-in-left  { animation: slide-in-left 0.28s ease; }
 
 @keyframes fade-in {
   from { opacity: 0; }

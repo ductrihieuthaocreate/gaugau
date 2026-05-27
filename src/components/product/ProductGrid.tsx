@@ -22,19 +22,15 @@ export function ProductGrid({ products, title, viewAllHref, columns = 4 }: Props
     <section className="py-12 md:py-16">
       {title && (
         <div className="container-site mb-8 flex items-center justify-between">
-          <div>
-            <h2 className="text-2xl md:text-[28px] font-bold tracking-tight leading-tight">
-              {title}
-            </h2>
-            <div className="mt-2 w-10 h-[3px] bg-black rounded-full" />
-          </div>
+          <h2 className="text-2xl md:text-[28px] font-bold tracking-tight leading-tight">
+            {title}
+          </h2>
           {viewAllHref && (
             <Link
               href={viewAllHref}
-              className="group flex items-center gap-1.5 text-[13px] font-bold uppercase tracking-[0.1em] hover:opacity-60 transition-opacity"
+              className="text-[13px] font-semibold text-[#7B189F] hover:underline transition-colors"
             >
               View All
-              <span className="inline-block transition-transform duration-200 group-hover:translate-x-0.5">→</span>
             </Link>
           )}
         </div>
