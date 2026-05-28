@@ -1,34 +1,38 @@
-"use client";
-
-import { useEffect } from "react";
 import Link from "next/link";
-import { useCartStore } from "@/store/cartStore";
 import { CheckCircle } from "lucide-react";
 
+export const metadata = { title: "Order Confirmed — go2go" };
+
 export default function CheckoutSuccessPage() {
-  const clearCart = useCartStore((s) => s.clearCart);
-
-  useEffect(() => {
-    clearCart();
-  }, [clearCart]);
-
   return (
-    <div className="min-h-[80vh] flex items-center justify-center px-4">
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-10 max-w-md w-full text-center">
-        <div className="flex justify-center mb-5">
-          <CheckCircle size={56} className="text-green-500" strokeWidth={1.5} />
-        </div>
-        <h1 className="text-2xl font-bold mb-2">Order Confirmed!</h1>
-        <p className="text-gray-500 text-sm mb-6 leading-relaxed">
-          Thank you for your purchase. You'll receive a confirmation email from Stripe shortly with your order details.
-        </p>
-        <Link
-          href="/"
-          className="inline-block bg-black text-white font-bold text-sm px-8 py-4 rounded-xl hover:bg-gray-900 transition-colors"
-        >
-          Continue Shopping
-        </Link>
-      </div>
+    <div
+      className="container-site flex flex-col items-center justify-center"
+      style={{ minHeight: "60vh", padding: "64px var(--container-pad)", textAlign: "center" }}
+    >
+      <CheckCircle size={64} color="#7B189F" strokeWidth={1.5} />
+      <h1 style={{ fontSize: "28px", fontWeight: 700, marginTop: "24px", marginBottom: "12px" }}>
+        Thank you for your order!
+      </h1>
+      <p style={{ fontSize: "15px", color: "#555", maxWidth: "440px", lineHeight: 1.6 }}>
+        Your order has been confirmed. You&apos;ll receive a confirmation email shortly with tracking details.
+      </p>
+      <Link
+        href="/"
+        style={{
+          marginTop: "32px",
+          display: "inline-block",
+          background: "#7B189F",
+          color: "white",
+          padding: "13px 32px",
+          borderRadius: "4px",
+          fontSize: "14px",
+          fontWeight: 700,
+          textDecoration: "none",
+          letterSpacing: "0.02em",
+        }}
+      >
+        Continue Shopping
+      </Link>
     </div>
   );
 }

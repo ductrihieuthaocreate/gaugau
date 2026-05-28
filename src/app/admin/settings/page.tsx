@@ -1,43 +1,97 @@
-export const dynamic = "force-dynamic";
-import { createAdminClient } from "@/lib/supabase/admin";
-import { SettingsClient } from "@/components/admin/SettingsClient";
+"use client";
 
-const DEFAULT_HERO = {
-  title: "New Arrivals",
-  subtitle:
-    "Explore our latest collection of playful, functional, and beautifully designed products.",
-  ctaLabel: "Shop New Arrivals",
-  ctaHref: "/collections/new",
-  imageSrc:
-    "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=1400&q=80",
-  overlayOpacity: 0.32,
-};
+import { useState } from "react";
+import { saveHeroSettings } from "@/lib/actions";
 
-const DEFAULT_ANNOUNCEMENT = {
-  messages: [
-    "Free Shipping on Orders Over $35",
-    "New Arrivals — Shop the Latest Collection :)",
-    "Designed with Love, Made to Last",
-  ],
-  speed: 3000,
-};
+export default function AdminSettingsPage() {
+  const [form, setForm] = useState({
+    title: "Design Gifts & Lifestyle",
+    subtitle: "Thoughtfully designed objects for everyday life. Gifts they'll actually love.",
+    ctaLabel: "Shop Now",
+    ctaHref: "/collections/new",
+    imageSrc: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=1600&q=80",
+    overlayOpacity: "0.35",
+  });
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
 
-const DEFAULT_SITE = {
-  siteName: "Gaugau",
-  siteTagline: "Playful, functional, beautifully designed.",
-  freeShippingThreshold: 3500,
-};
+  const set = (k: string, v: string) => setForm((f) => ({ ...f, [k]: v }));
 
-export default async function AdminSettingsPage() {
-  const supabase = createAdminClient();
-  const { data: rows } = await supabase.from("site_settings").select("*");
-  const map = Object.fromEntries((rows ?? []).map((r) => [r.key, r.value]));
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSaving(true);
+    await saveHeroSettings({ ...form, overlayOpacity: parseFloat(form.overlayOpacity) });
+    setSaving(false);
+    setSaved(true);
+    setTimeout(() => setSaved(false), 2500);
+  };
+
+  const inputStyle = {
+    width: "100%",
+    border: "1px solid #E5E5E5",
+    borderRadius: "4px",
+    padding: "9px 12px",
+    fontSize: "14px",
+    outline: "none",
+    background: "#fff",
+  };
+  const labelStyle = { display: "block", fontSize: "13px", fontWeight: 600 as const, color: "#555", marginBottom: "6px" };
 
   return (
-    <SettingsClient
-      initialHero={map.hero ?? DEFAULT_HERO}
-      initialAnnouncement={map.announcement ?? DEFAULT_ANNOUNCEMENT}
-      initialSite={map.site ?? DEFAULT_SITE}
-    />
+    <div style={{ padding: "32px" }}>
+      <h1 style={{ fontSize: "22px", fontWeight: 700, marginBottom: "8px" }}>Settings</h1>
+      <p style={{ fontSize: "14px", color: "#888", marginBottom: "32px" }}>Configure the homepage hero banner.</p>
+
+      <div style={{ background: "#fff", border: "1px solid #E5E5E5", borderRadius: "8px", padding: "28px", maxWidth: "600px" }}>
+        <h2 style={{ fontSize: "16px", fontWeight: 700, marginBottom: "24px" }}>Hero Banner</h2>
+        <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "18px" }}>
+          <div>
+            <label style={labelStyle}>Headline</label>
+            <input value={form.title} onChange={(e) => set("title", e.target.value)} style={inputStyle} />
+          </div>
+          <div>
+            <label style={labelStyle}>Subtitle</label>
+            <textarea value={form.subtitle} onChange={(e) => set("subtitle", e.target.value)} rows={2} style={{ ...inputStyle, resize: "vertical" }} />
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+            <div>
+              <label style={labelStyle}>CTA Label</label>
+              <input value={form.ctaLabel} onChange={(e) => set("ctaLabel", e.target.value)} style={inputStyle} />
+            </div>
+            <div>
+              <label style={labelStyle}>CTA Link</label>
+              <input value={form.ctaHref} onChange={(e) => set("ctaHref", e.target.value)} style={inputStyle} />
+            </div>
+          </div>
+          <div>
+            <label style={labelStyle}>Background Image URL</label>
+            <input value={form.imageSrc} onChange={(e) => set("imageSrc", e.target.value)} style={inputStyle} />
+          </div>
+          <div>
+            <label style={labelStyle}>Overlay Opacity (0–1)</label>
+            <input type="number" min="0" max="1" step="0.05" value={form.overlayOpacity} onChange={(e) => set("overlayOpacity", e.target.value)} style={{ ...inputStyle, maxWidth: "120px" }} />
+          </div>
+          <div>
+            <button
+              type="submit"
+              disabled={saving}
+              style={{
+                background: saved ? "#059669" : saving ? "#ccc" : "#7B189F",
+                color: "white",
+                border: "none",
+                borderRadius: "4px",
+                padding: "10px 28px",
+                fontSize: "14px",
+                fontWeight: 700,
+                cursor: saving ? "not-allowed" : "pointer",
+                transition: "background 200ms",
+              }}
+            >
+              {saved ? "Saved!" : saving ? "Saving…" : "Save Settings"}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
   );
 }

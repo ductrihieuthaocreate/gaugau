@@ -1,24 +1,14 @@
-export const dynamic = "force-dynamic";
-import { createAdminClient } from "@/lib/supabase/admin";
-import { NewProductClient } from "@/components/admin/NewProductClient";
-import type { Category } from "@/types";
+import { getAdminCategories } from "@/lib/actions";
+import ProductForm from "../ProductForm";
+
+export const metadata = { title: "New Product — go2go Admin" };
 
 export default async function NewProductPage() {
-  const supabase = createAdminClient();
-  const { data: categories } = await supabase
-    .from("categories")
-    .select("*")
-    .order("sort_order");
-
+  const categories = await getAdminCategories();
   return (
-    <div className="max-w-3xl">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">New Product</h1>
-        <p className="text-gray-500 text-sm mt-0.5">
-          Fill in the details to add a new product to your store.
-        </p>
-      </div>
-      <NewProductClient categories={(categories as Category[]) ?? []} />
+    <div style={{ padding: "32px" }}>
+      <h1 style={{ fontSize: "22px", fontWeight: 700, marginBottom: "28px" }}>Add Product</h1>
+      <ProductForm categories={categories} />
     </div>
   );
 }

@@ -1,62 +1,58 @@
-import { ProductCard } from "@/components/product/ProductCard";
-import { MOCK_PRODUCTS } from "@/lib/mockData";
+import { getProducts } from "@/lib/products";
+import ProductCard from "@/components/product/ProductCard";
 
 interface Props {
   searchParams: Promise<{ q?: string }>;
 }
 
-export default async function SearchPage({ searchParams }: Props) {
-  const { q = "" } = await searchParams;
-  const query = q.toLowerCase().trim();
-
-  const results = query
-    ? MOCK_PRODUCTS.filter(
-        (p) =>
-          p.title.toLowerCase().includes(query) ||
-          p.description?.toLowerCase().includes(query) ||
-          p.tags.some((t) => t.toLowerCase().includes(query))
-      )
-    : [];
-
-  return (
-    <div className="min-h-screen">
-      <div className="bg-[#f1f1f1] py-10">
-        <div className="container-site">
-          <h1 className="text-3xl font-bold">
-            {query ? `Search results for "${q}"` : "Search"}
-          </h1>
-          {query && (
-            <p className="text-gray-500 text-sm mt-2">
-              {results.length} result{results.length !== 1 ? "s" : ""}
-            </p>
-          )}
-        </div>
-      </div>
-
-      <div className="container-site py-8">
-        {!query && (
-          <p className="text-gray-500 text-center py-20">
-            Enter a search term to find products.
-          </p>
-        )}
-        {query && results.length === 0 && (
-          <div className="text-center py-20 text-gray-500">
-            <p className="text-lg font-medium mb-2">No results found</p>
-            <p className="text-sm">Try a different search term.</p>
-          </div>
-        )}
-        {results.length > 0 && (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-8">
-            {results.map((p) => (
-              <ProductCard key={p.id} product={p} />
-            ))}
-          </div>
-        )}
-      </div>
-    </div>
-  );
+export async function generateMetadata({ searchParams }: Props) {
+  const { q } = await searchParams;
+  return { title: q ? `Search: "${q}" — go2go` : "Search — go2go" };
 }
 
-export function generateMetadata({ searchParams }: Props) {
-  return { title: "Search — Gaugau" };
+export default async function SearchPage({ searchParams }: Props) {
+  const { q } = await searchParams;
+  const query = q?.trim() ?? "";
+
+  const products = query ? await getProducts({ search: query, limit: 48 }) : [];
+
+  return (
+    <div className="container-site" style={{ padding: "32px var(--container-pad) 64px" }}>
+      <h1 style={{ fontSize: "clamp(20px, 3vw, 28px)", fontWeight: 700, marginBottom: "8px" }}>
+        {query ? `Search results for "${query}"` : "Search"}
+      </h1>
+      {query && (
+        <p style={{ fontSize: "13px", color: "#888", marginBottom: "28px" }}>
+          {products.length} {products.length === 1 ? "result" : "results"}
+        </p>
+      )}
+
+      {!query && (
+        <div style={{ marginTop: "60px", textAlign: "center", color: "#888" }}>
+          <p style={{ fontSize: "16px" }}>Enter a search term above to find products.</p>
+        </div>
+      )}
+
+      {query && products.length === 0 && (
+        <div style={{ textAlign: "center", padding: "60px 0", color: "#888" }}>
+          <p style={{ fontSize: "18px", marginBottom: "8px" }}>No results for &quot;{query}&quot;</p>
+          <p style={{ fontSize: "14px" }}>Try checking your spelling or using more general terms.</p>
+        </div>
+      )}
+
+      {products.length > 0 && (
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
+            gap: "16px",
+          }}
+        >
+          {products.map((p) => (
+            <ProductCard key={p.id} product={p} />
+          ))}
+        </div>
+      )}
+    </div>
+  );
 }

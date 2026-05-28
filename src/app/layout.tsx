@@ -1,26 +1,16 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({
-  subsets: ["latin"],
-  weight: ["400", "700"],
-  style: ["normal", "italic"],
-  display: "swap",
-  variable: "--font-inter",
-});
-
 export const metadata: Metadata = {
-  title: "Go2go — Your Go-To for Design Gifts",
-  description: "Shop curated design gifts and lifestyle products for home, kitchen, play, and more. Free shipping on orders over $35.",
+  title: "Go2go — Design Gifts & Lifestyle",
+  description: "Shop thoughtfully designed gifts & lifestyle products at Go2go. Free shipping on orders over $35.",
+  metadataBase: new URL("https://go2godesigns.com"),
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${inter.variable} ${inter.className}`} data-scroll-behavior="smooth">
-      <body className="min-h-screen flex flex-col">
-        {children}
-      </body>
+    <html lang="en" className="h-full">
+      <body className="min-h-full flex flex-col antialiased">{children}</body>
     </html>
   );
 }

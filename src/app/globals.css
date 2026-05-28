@@ -1,126 +1,95 @@
 @import "tailwindcss";
 
-:root {
-  --container-margin: 16px;
-  --ideal-width: 1440px;
-  --card-radius: 4px;
-  --btn-radius: 4px;
+@font-face {
+  font-family: "Sofia";
+  src: url("/fonts/sofia-reg.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
 
-  /* Wayfair brand purple */
+@font-face {
+  font-family: "Sofia";
+  src: url("/fonts/sofia-bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
   --brand:       #7B189F;
   --brand-dark:  #5c1278;
-  --brand-light: #f5eafa;
-  --sale:        #D4232A;
-  --sale-dark:   #b01c21;
+  --brand-light: #f3e8fb;
+  --sale:        #990E35;
+  --sale-dark:   #7a0b2a;
+  --text:        #212121;
+  --border:      #E5E5E5;
+  --container-max: 1440px;
+  --container-pad: 16px;
 }
 
-@media (min-width: 640px) {
-  :root { --container-margin: 24px; }
-}
-
-@media (min-width: 1024px) {
-  :root { --container-margin: 40px; }
-}
+@media (min-width: 640px)  { :root { --container-pad: 24px; } }
+@media (min-width: 1024px) { :root { --container-pad: 40px; } }
 
 * { box-sizing: border-box; }
-
-html {
-  scroll-behavior: smooth;
-  -webkit-text-size-adjust: 100%;
-}
-
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
 a { text-decoration: none; }
 
-:root {
-  --body-weight:         400;
-  --body-line-height:    1.5;
-  --body-letter-spacing: 0em;
-
-  --heading-weight:         700;
-  --heading-line-height:    1.2;
-  --heading-letter-spacing: -0.01em;
-
-  --nav-size:           13px;
-  --nav-weight:         500;
-  --nav-letter-spacing: 0em;
-
-  --btn-font-size:      14px;
-  --btn-font-weight:    700;
-  --btn-letter-spacing: 0em;
-}
-
 body {
-  font-family: var(--font-inter, 'Inter', system-ui, sans-serif);
+  font-family: "Sofia", system-ui, -apple-system, sans-serif;
   font-size: 14px;
-  font-weight: var(--body-weight);
-  line-height: var(--body-line-height);
-  letter-spacing: var(--body-letter-spacing);
-  color: #212121;
+  color: var(--text);
   background: #fff;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-@media (min-width: 768px) {
-  body { font-size: 15px; }
-}
+@media (min-width: 768px) { body { font-size: 15px; } }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-inter, 'Inter', system-ui, sans-serif);
-  font-weight: var(--heading-weight);
-  line-height: var(--heading-line-height);
-  letter-spacing: var(--heading-letter-spacing);
-  color: #212121;
+  font-family: "Sofia", system-ui, -apple-system, sans-serif;
+  color: var(--text);
 }
 
 .container-site {
   width: 100%;
-  max-width: var(--ideal-width);
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: var(--container-margin);
-  padding-right: var(--container-margin);
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--container-pad);
 }
 
 .sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border-width: 0;
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0,0,0,0); white-space: nowrap; border-width: 0;
 }
-
-@keyframes cart-pop {
-  0%   { transform: scale(1); }
-  50%  { transform: scale(1.35); }
-  100% { transform: scale(1); }
-}
-.cart-pop { animation: cart-pop 0.2s ease; }
 
 @keyframes slide-in-right {
   from { transform: translateX(100%); }
-  to   { transform: translateX(0); }
+  to   { transform: translateX(0);    }
 }
 @keyframes slide-in-left {
   from { transform: translateX(-100%); }
-  to   { transform: translateX(0); }
+  to   { transform: translateX(0);     }
 }
-.slide-in-right { animation: slide-in-right 0.28s ease; }
-.slide-in-left  { animation: slide-in-left 0.28s ease; }
-
 @keyframes fade-in {
   from { opacity: 0; }
   to   { opacity: 1; }
 }
-.fade-in { animation: fade-in 0.2s ease; }
+
+.slide-in-right { animation: slide-in-right 0.25s ease; }
+.slide-in-left  { animation: slide-in-left  0.25s ease; }
+.fade-in        { animation: fade-in 0.2s ease; }
 
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }

@@ -1,156 +1,158 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
-import { ShoppingBag, Star } from "lucide-react";
-import { useCartStore } from "@/store/cartStore";
+import Image from "next/image";
+import { ShoppingCart, Star } from "lucide-react";
 import type { Product } from "@/types";
+import { useCartStore } from "@/store/cartStore";
 
 interface Props {
   product: Product;
 }
 
-function formatPrice(cents: number) {
-  return `$${(cents / 100).toFixed(2)}`;
-}
-
-function StarRating({ rating = 4.5, count = 0 }: { rating?: number; count?: number }) {
-  const full  = Math.floor(rating);
-  const half  = rating % 1 >= 0.5;
-  return (
-    <div className="flex items-center gap-1 mt-1">
-      <div className="flex items-center gap-px">
-        {[1, 2, 3, 4, 5].map((i) => (
-          <Star
-            key={i}
-            size={11}
-            strokeWidth={0}
-            fill={i <= full ? "#F59E0B" : i === full + 1 && half ? "url(#half)" : "#D1D5DB"}
-          />
-        ))}
-      </div>
-      {count > 0 && (
-        <span className="text-[11px] text-gray-500">{count.toLocaleString()}</span>
-      )}
-    </div>
-  );
-}
-
-export function ProductCard({ product }: Props) {
-  const { addItem } = useCartStore();
-
-  const primaryImage  = product.images?.[0];
-  const hoverImage    = product.images?.[1];
-  const isNew         = product.tags?.includes("new");
-  const isSoldOut     = product.stock_quantity === 0;
-  const hasDiscount   = product.compare_at_price && product.compare_at_price > product.price;
-  const discountPct   = hasDiscount
-    ? Math.round(((product.compare_at_price! - product.price) / product.compare_at_price!) * 100)
+export default function ProductCard({ product }: Props) {
+  const addItem = useCartStore((s) => s.addItem);
+  const img = product.images?.[0];
+  const hasCompare = product.compare_at_price && product.compare_at_price > product.price;
+  const discount = hasCompare
+    ? Math.round((1 - product.price / product.compare_at_price!) * 100)
     : 0;
-  const eligibleFreeShip = product.price >= 3500;
 
   return (
-    <div className="group flex flex-col bg-white">
-
-      {/* ── Image ── */}
-      <Link href={`/products/${product.slug}`} className="block relative">
-        <div className="relative overflow-hidden bg-gray-50 aspect-square border border-gray-100 group-hover:border-gray-300 transition-colors duration-200" style={{ borderRadius: "4px" }}>
-
-          {primaryImage ? (
-            <>
-              <Image
-                src={primaryImage.url}
-                alt={primaryImage.alt || product.title}
-                fill
-                className={`object-cover transition-all duration-500 ease-out group-hover:scale-105
-                  ${hoverImage ? "group-hover:opacity-0" : ""}`}
-                sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-              />
-              {hoverImage && (
-                <Image
-                  src={hoverImage.url}
-                  alt={hoverImage.alt || product.title}
-                  fill
-                  className="object-cover opacity-0 scale-105 transition-all duration-500 ease-out group-hover:opacity-100 group-hover:scale-100"
-                  sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                />
-              )}
-            </>
-          ) : (
-            <div className="absolute inset-0 flex items-center justify-center text-gray-200">
-              <ShoppingBag size={44} strokeWidth={1} />
-            </div>
-          )}
-
-          {/* Badges */}
-          <div className="absolute top-2.5 left-2.5 flex flex-col gap-1 z-10">
-            {isSoldOut && (
-              <span className="bg-gray-600 text-white text-[10px] font-bold uppercase tracking-wide px-2 py-0.5 rounded">
-                Sold Out
-              </span>
-            )}
-            {!isSoldOut && isNew && (
-              <span className="text-white text-[10px] font-bold uppercase tracking-wide px-2 py-0.5 rounded" style={{ background: "var(--brand)" }}>
-                New
-              </span>
-            )}
-            {!isSoldOut && hasDiscount && (
-              <span className="text-white text-[10px] font-bold uppercase tracking-wide px-2 py-0.5 rounded" style={{ background: "var(--sale)" }}>
-                -{discountPct}%
-              </span>
-            )}
+    <div
+      style={{ display: "flex", flexDirection: "column", background: "#fff" }}
+      onMouseEnter={(e) => {
+        (e.currentTarget as HTMLDivElement).style.boxShadow = "0 2px 12px rgba(0,0,0,0.1)";
+      }}
+      onMouseLeave={(e) => {
+        (e.currentTarget as HTMLDivElement).style.boxShadow = "none";
+      }}
+    >
+      {/* Image */}
+      <Link
+        href={`/products/${product.slug}`}
+        style={{ display: "block", position: "relative", paddingBottom: "100%", background: "#F5F5F5", overflow: "hidden" }}
+      >
+        {img?.url ? (
+          <Image
+            src={img.url}
+            alt={img.alt ?? product.title}
+            fill
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+            style={{ objectFit: "cover", transition: "transform 350ms ease" }}
+            onMouseEnter={(e) => {
+              (e.currentTarget as HTMLImageElement).style.transform = "scale(1.04)";
+            }}
+            onMouseLeave={(e) => {
+              (e.currentTarget as HTMLImageElement).style.transform = "scale(1)";
+            }}
+          />
+        ) : (
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              background: "#E8E8E8",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: "12px",
+              color: "#aaa",
+            }}
+          >
+            No image
           </div>
+        )}
 
-          {/* Quick-add */}
-          {!isSoldOut && (
-            <div className="absolute inset-x-2.5 bottom-2.5 translate-y-3 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-250 ease-out z-10">
-              <button
-                onClick={(e) => {
-                  e.preventDefault();
-                  addItem(product);
-                }}
-                className="w-full text-white text-[12px] font-bold py-2.5 flex items-center justify-center gap-1.5 hover:opacity-90 transition-opacity"
-                style={{ borderRadius: "4px", background: "var(--brand)", letterSpacing: "var(--btn-letter-spacing)" }}
-              >
-                <ShoppingBag size={13} strokeWidth={2} />
-                Add to Cart
-              </button>
-            </div>
-          )}
-        </div>
+        {discount >= 10 && (
+          <span
+            style={{
+              position: "absolute",
+              top: "8px",
+              left: "8px",
+              background: "#990E35",
+              color: "white",
+              fontSize: "11px",
+              fontWeight: 700,
+              padding: "2px 7px",
+              borderRadius: "2px",
+            }}
+          >
+            {discount}% OFF
+          </span>
+        )}
       </Link>
 
-      {/* ── Info ── */}
-      <div className="mt-3 flex flex-col flex-1 gap-0.5">
+      {/* Info */}
+      <div style={{ padding: "10px 0 12px", flex: 1, display: "flex", flexDirection: "column" }}>
         {product.category && (
-          <p className="text-[11px] uppercase tracking-widest text-gray-400 font-medium">
+          <p style={{ fontSize: "11px", color: "#888", marginBottom: "3px", textTransform: "uppercase", letterSpacing: "0.04em" }}>
             {product.category.name}
           </p>
         )}
 
         <Link
           href={`/products/${product.slug}`}
-          className="text-[13px] font-medium leading-snug line-clamp-2 text-gray-900 hover:text-[var(--brand)] transition-colors"
+          style={{
+            fontSize: "13px",
+            color: "#212121",
+            textDecoration: "none",
+            fontWeight: 500,
+            lineHeight: "1.35",
+            flex: 1,
+            display: "-webkit-box",
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: "vertical",
+            overflow: "hidden",
+          }}
         >
           {product.title}
         </Link>
 
-        <StarRating />
-
-        <div className="flex items-center gap-2 mt-1">
-          <span className="text-[14px] font-bold text-gray-900">
-            {formatPrice(product.price)}
-          </span>
-          {hasDiscount && (
-            <span className="text-[12px] text-gray-400 line-through">
-              {formatPrice(product.compare_at_price!)}
-            </span>
-          )}
+        {/* Stars */}
+        <div className="flex items-center" style={{ gap: "2px", marginTop: "6px" }}>
+          {[1, 2, 3, 4, 5].map((i) => (
+            <Star
+              key={i}
+              size={11}
+              fill={i <= 4 ? "#F59E0B" : "none"}
+              color={i <= 4 ? "#F59E0B" : "#ccc"}
+            />
+          ))}
+          <span style={{ fontSize: "11px", color: "#888", marginLeft: "4px" }}>(24)</span>
         </div>
 
-        {eligibleFreeShip && (
-          <p className="text-[11px] text-green-600 font-medium mt-0.5">Free shipping</p>
-        )}
+        {/* Price + cart */}
+        <div className="flex items-center justify-between" style={{ marginTop: "8px" }}>
+          <div className="flex items-baseline" style={{ gap: "6px" }}>
+            <span style={{ fontSize: "15px", fontWeight: 700, color: "#212121" }}>
+              ${(product.price / 100).toFixed(2)}
+            </span>
+            {hasCompare && (
+              <span style={{ fontSize: "12px", color: "#999", textDecoration: "line-through" }}>
+                ${(product.compare_at_price! / 100).toFixed(2)}
+              </span>
+            )}
+          </div>
+          <button
+            onClick={() => addItem(product)}
+            title="Add to cart"
+            style={{
+              width: "32px",
+              height: "32px",
+              background: "#7B189F",
+              border: "none",
+              borderRadius: "4px",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flexShrink: 0,
+            }}
+          >
+            <ShoppingCart size={15} color="white" />
+          </button>
+        </div>
       </div>
     </div>
   );

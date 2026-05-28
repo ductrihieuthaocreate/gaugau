@@ -1,176 +1,107 @@
-import Link from "next/link";
-import Image from "next/image";
-import { getProducts } from "@/lib/products";
+import HeroBanner from "@/components/home/HeroBanner";
+import CategoryGrid from "@/components/home/CategoryGrid";
+import OccasionTiles from "@/components/home/OccasionTiles";
+import ProductGrid from "@/components/product/ProductGrid";
 import { getHeroSettings } from "@/lib/settings";
-import { HeroBanner } from "@/components/home/HeroBanner";
-import { ProductGrid } from "@/components/product/ProductGrid";
-import { CategoryGrid } from "@/components/home/CategoryGrid";
-
-/* ── Editorial promo tiles (dark-overlay, Wayfair style) ── */
-const PROMO_TILES = [
-  {
-    label: "Gifts Under $25",
-    href: "/collections/gifts-under-25",
-    imageSrc: "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=800&q=80",
-  },
-  {
-    label: "New Arrivals",
-    href: "/collections/new",
-    imageSrc: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&q=80",
-  },
-  {
-    label: "For the Home",
-    href: "/collections/home",
-    imageSrc: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800&q=80",
-  },
-  {
-    label: "Trending Now",
-    href: "/collections/best-sellers",
-    imageSrc: "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=800&q=80",
-  },
-];
-
-/* ── "Shop by Occasion" tiles ── */
-const OCCASION_TILES = [
-  {
-    name: "Birthday",
-    href: "/collections/gifts",
-    imageSrc: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80",
-  },
-  {
-    name: "Housewarming",
-    href: "/collections/home",
-    imageSrc: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&q=80",
-  },
-  {
-    name: "Kitchen",
-    href: "/collections/kitchen",
-    imageSrc: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&q=80",
-  },
-  {
-    name: "Wellness",
-    href: "/collections/wellness",
-    imageSrc: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=600&q=80",
-  },
-  {
-    name: "Cool Tools",
-    href: "/collections/cool-tools",
-    imageSrc: "https://images.unsplash.com/photo-1581235720704-06d3acfcb36f?w=600&q=80",
-  },
-];
+import { getProducts } from "@/lib/products";
+import Link from "next/link";
 
 export default async function HomePage() {
-  const [newArrivals, bestSellers, hero] = await Promise.all([
-    getProducts({ tag: "new", limit: 8 }),
-    getProducts({ featured: true, limit: 8 }),
+  const [hero, featured, newArrivals, bestSellers] = await Promise.all([
     getHeroSettings(),
+    getProducts({ featured: true, limit: 8 }),
+    getProducts({ limit: 8 }),
+    getProducts({ tag: "best-seller", limit: 8 }),
   ]);
 
   return (
     <>
-      {/* ── 1. Hero banner ── */}
-      <HeroBanner
-        title={hero.title}
-        subtitle={hero.subtitle}
-        ctaLabel={hero.ctaLabel}
-        ctaHref={hero.ctaHref}
-        imageSrc={hero.imageSrc}
-        overlayOpacity={hero.overlayOpacity}
+      <HeroBanner settings={hero} />
+
+      {/* Value props bar */}
+      <div style={{ background: "#F9F9F9", borderBottom: "1px solid #E5E5E5", padding: "14px 0" }}>
+        <div
+          className="container-site"
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+            gap: "12px",
+          }}
+        >
+          {[
+            { icon: "🚚", text: "Free shipping over $35" },
+            { icon: "↩️", text: "Easy 30-day returns" },
+            { icon: "⭐", text: "100,000+ happy customers" },
+            { icon: "💳", text: "Secure checkout" },
+          ].map((v) => (
+            <div
+              key={v.text}
+              className="flex items-center justify-center"
+              style={{ gap: "8px", fontSize: "13px", fontWeight: 500, color: "#444" }}
+            >
+              <span style={{ fontSize: "16px" }}>{v.icon}</span>
+              {v.text}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <CategoryGrid />
+
+      {featured.length > 0 && (
+        <ProductGrid
+          products={featured}
+          heading="Featured Picks"
+          shopAllHref="/collections/new"
+        />
+      )}
+
+      {/* Promo banner */}
+      <div style={{ background: "#7B189F", padding: "56px 16px", textAlign: "center" }}>
+        <div className="container-site">
+          <p style={{ fontSize: "12px", fontWeight: 700, color: "rgba(255,255,255,0.7)", letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: "12px" }}>
+            Limited Time
+          </p>
+          <h2 style={{ fontSize: "clamp(26px, 4vw, 40px)", fontWeight: 700, color: "white", marginBottom: "12px" }}>
+            Summer Sale — Up to 70% Off
+          </h2>
+          <p style={{ fontSize: "15px", color: "rgba(255,255,255,0.8)", marginBottom: "28px" }}>
+            Shop our biggest sale of the year. New markdowns added daily.
+          </p>
+          <Link
+            href="/collections/sale"
+            style={{
+              display: "inline-block",
+              background: "white",
+              color: "#7B189F",
+              padding: "14px 36px",
+              borderRadius: "4px",
+              fontSize: "15px",
+              fontWeight: 700,
+              textDecoration: "none",
+              letterSpacing: "0.02em",
+            }}
+          >
+            Shop the Sale
+          </Link>
+        </div>
+      </div>
+
+      <ProductGrid
+        products={newArrivals}
+        heading="New Arrivals"
+        shopAllHref="/collections/new"
       />
 
-      {/* ── 2. Editorial promo tiles — dark overlay, white text ── */}
-      <section className="py-8 md:py-12 bg-white border-b border-gray-100">
-        <div className="container-site">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
-            {PROMO_TILES.map((tile) => (
-              <Link
-                key={tile.label}
-                href={tile.href}
-                className="group relative overflow-hidden aspect-[4/3]"
-                style={{ borderRadius: "4px" }}
-              >
-                <Image
-                  src={tile.imageSrc}
-                  alt={tile.label}
-                  fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
-                  sizes="(max-width: 640px) 50vw, 25vw"
-                />
-                {/* Dark gradient overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-                <div className="absolute bottom-0 left-0 right-0 p-3 md:p-4">
-                  <h3 className="text-white font-bold text-sm md:text-base leading-tight">
-                    {tile.label}
-                  </h3>
-                  <p className="text-white/80 text-xs mt-0.5 group-hover:underline">
-                    Shop Now
-                  </p>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── 3. New Arrivals ── */}
-      <section className="bg-white border-b border-gray-100">
-        <ProductGrid
-          products={newArrivals}
-          title="New Arrivals"
-          viewAllHref="/collections/new"
-          columns={4}
-        />
-      </section>
-
-      {/* ── 4. Shop by Occasion ── */}
-      <section className="bg-white border-b border-gray-100">
-        <CategoryGrid title="Shop by Occasion" categories={OCCASION_TILES} />
-      </section>
-
-      {/* ── 5. Best Sellers ── */}
-      <section className="bg-white border-b border-gray-100">
+      {bestSellers.length > 0 && (
         <ProductGrid
           products={bestSellers}
-          title="Best Sellers"
-          viewAllHref="/collections/best-sellers"
-          columns={4}
+          heading="Best Sellers"
+          shopAllHref="/collections/best-sellers"
         />
-      </section>
+      )}
 
-      {/* ── 6. Wide editorial banner — image + text side by side ── */}
-      <section className="py-10 md:py-14 bg-white border-b border-gray-100">
-        <div className="container-site">
-          <div className="grid md:grid-cols-2 gap-0 overflow-hidden" style={{ borderRadius: "4px" }}>
-            <div className="relative aspect-[4/3] md:aspect-auto md:min-h-[320px]">
-              <Image
-                src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=900&q=80"
-                alt="Sale items"
-                fill
-                className="object-cover"
-                sizes="(max-width: 768px) 100vw, 50vw"
-              />
-            </div>
-            <div className="bg-gray-50 flex flex-col justify-center px-8 md:px-12 py-10">
-              <p className="text-xs font-bold uppercase tracking-widest text-gray-500 mb-3">
-                Limited Time
-              </p>
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 leading-tight mb-4">
-                Up to 40% Off<br />Sale Items
-              </h2>
-              <p className="text-gray-500 text-sm mb-6 leading-relaxed">
-                Clearance on selected design favourites. While stocks last.
-              </p>
-              <Link
-                href="/collections/sale"
-                className="self-start inline-flex items-center gap-2 text-white font-bold px-6 py-3 text-sm hover:opacity-90 transition-opacity"
-                style={{ background: "#7B189F", borderRadius: "4px" }}
-              >
-                Shop the Sale
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
+      <OccasionTiles />
     </>
   );
 }

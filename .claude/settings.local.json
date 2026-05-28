@@ -29,7 +29,26 @@
       "Bash(vercel link *)",
       "Bash(\"C:\\\\Program Files\\\\GitHub CLI\\\\gh.exe\" auth status --hostname github.com)",
       "Bash(git remote *)",
-      "Bash(\"C:\\\\Program Files\\\\GitHub CLI\\\\gh.exe\" auth login --web --hostname github.com)"
+      "Bash(\"C:\\\\Program Files\\\\GitHub CLI\\\\gh.exe\" auth login --web --hostname github.com)",
+      "Bash(supabase --version)",
+      "Bash(npx supabase *)",
+      "Bash(node -e ' *)",
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\Admin\\\\Documents\\\\claude code project\\\\gaugau\\\\src\" -Recurse -Force)",
+      "Bash(Select-Object FullName)",
+      "Bash(Sort-Object FullName)",
+      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\Admin\\\\Documents\\\\claude code project\\\\gaugau\\\\src\" -Recurse | Select-Object FullName, @{Name=\"Type\"; Expression={if\\($_.PSIsContainer\\){\"DIR\"}else{\"FILE\"}}} | Sort-Object FullName | Format-Table -AutoSize)",
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\Admin\\\\Downloads\\\\www.wayfair.com\\\\\" -Directory | Select-Object Name)",
+      "PowerShell(@\\(Get-ChildItem -Path \"C:\\\\Users\\\\Admin\\\\Downloads\\\\www.wayfair.com\\\\assets.wfcdn.com\\\\webpack\\\\sf-ui-core-funnel\\\\_next\\\\static\\\\chunks\\\\\" -File | Select-Object Name | Sort-Object Name\\) | Measure-Object | Select-Object Count)",
+      "Bash(npx create-next-app@16 gaugau --typescript --tailwind --eslint --app --src-dir --import-alias \"@/*\" --use-npm)",
+      "Bash(cd \"c:/Users/Admin/Documents/claude code project/gaugau\" && cp .env.local /tmp/env_backup.txt && rm -f .env.local && rm -rf .vercel && echo \"done\")",
+      "Bash(cd \"c:/Users/Admin/Documents/claude code project/gaugau\" && mkdir -p src/types src/store \"src/lib/supabase\" src/components/layout src/components/product src/components/home src/components/cart \"src/app/\\(store\\)/products/[slug]\" \"src/app/\\(store\\)/collections/[slug]\" \"src/app/\\(store\\)/search\" \"src/app/\\(store\\)/checkout\" \"src/app/admin/products/[id]\" src/app/admin/products/new src/app/admin/categories src/app/admin/orders src/app/admin/settings \"src/app/api/webhooks/stripe\" public/fonts supabase && echo \"dirs created\")",
+      "Bash(cp \"c:/Users/Admin/Downloads/www.wayfair.com/assets.wfcdn.com/homebase/sofia/sofia-reg-subset.woff2\" \"c:/Users/Admin/Documents/claude code project/gaugau/public/fonts/sofia-reg.woff2\")",
+      "Bash(cp \"c:/Users/Admin/Downloads/www.wayfair.com/assets.wfcdn.com/homebase/sofia/sofia-bold-subset.woff2\" \"c:/Users/Admin/Documents/claude code project/gaugau/public/fonts/sofia-bold.woff2\")",
+      "Bash(Remove-Item \"c:\\\\Users\\\\Admin\\\\Documents\\\\claude code project\\\\gaugau\\\\src\\\\app\\\\page.tsx\" -Force)"
+    ],
+    "additionalDirectories": [
+      "\\tmp",
+      "C:\\Users\\Admin\\Documents\\claude code project\\gaugau\\src\\app\\(store)\\products"
     ]
   }
 }

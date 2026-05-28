@@ -2,68 +2,68 @@
 
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import type { CartItem, CartState, Product } from "@/types";
+import type { CartItem, Product } from "@/types";
 
-export const useCartStore = create<CartState>()(
+interface CartStore {
+  items: CartItem[];
+  isOpen: boolean;
+  addItem: (product: Product, quantity?: number) => void;
+  removeItem: (productId: string) => void;
+  updateQuantity: (productId: string, quantity: number) => void;
+  clearCart: () => void;
+  totalItems: () => number;
+  subtotal: () => number;
+  openCart: () => void;
+  closeCart: () => void;
+}
+
+export const useCartStore = create<CartStore>()(
   persist(
     (set, get) => ({
       items: [],
       isOpen: false,
 
-      addItem: (product: Product, quantity = 1) => {
+      addItem: (product, quantity = 1) => {
         set((state) => {
-          const existing = state.items.find((i) => i.id === product.id);
+          const existing = state.items.find((i) => i.product.id === product.id);
           if (existing) {
             return {
               items: state.items.map((i) =>
-                i.id === product.id
+                i.product.id === product.id
                   ? { ...i, quantity: i.quantity + quantity }
                   : i
               ),
-              isOpen: true,
             };
           }
-          const newItem: CartItem = {
-            id: product.id,
-            product,
-            quantity,
-            price: product.price,
-          };
-          return { items: [...state.items, newItem], isOpen: true };
+          return { items: [...state.items, { product, quantity }] };
         });
       },
 
-      removeItem: (id: string) => {
+      removeItem: (productId) =>
         set((state) => ({
-          items: state.items.filter((i) => i.id !== id),
-        }));
-      },
+          items: state.items.filter((i) => i.product.id !== productId),
+        })),
 
-      updateQuantity: (id: string, quantity: number) => {
-        if (quantity < 1) {
-          get().removeItem(id);
-          return;
-        }
+      updateQuantity: (productId, quantity) =>
         set((state) => ({
-          items: state.items.map((i) =>
-            i.id === id ? { ...i, quantity } : i
-          ),
-        }));
-      },
+          items:
+            quantity <= 0
+              ? state.items.filter((i) => i.product.id !== productId)
+              : state.items.map((i) =>
+                  i.product.id === productId ? { ...i, quantity } : i
+                ),
+        })),
 
       clearCart: () => set({ items: [] }),
 
-      openCart: () => set({ isOpen: true }),
-      closeCart: () => set({ isOpen: false }),
-
       totalItems: () => get().items.reduce((sum, i) => sum + i.quantity, 0),
 
-      totalPrice: () =>
-        get().items.reduce((sum, i) => sum + i.price * i.quantity, 0),
+      subtotal: () =>
+        get().items.reduce((sum, i) => sum + i.product.price * i.quantity, 0),
+
+      openCart: () => set({ isOpen: true }),
+      closeCart: () => set({ isOpen: false }),
     }),
-    {
-      name: "gaugau-cart",
-      partialize: (state) => ({ items: state.items }),
-    }
+    { name: "go2go-cart" }
   )
 );

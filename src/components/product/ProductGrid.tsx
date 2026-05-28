@@ -1,44 +1,49 @@
-import { ProductCard } from "./ProductCard";
 import Link from "next/link";
 import type { Product } from "@/types";
+import ProductCard from "./ProductCard";
 
 interface Props {
   products: Product[];
-  title?: string;
-  viewAllHref?: string;
-  columns?: 2 | 3 | 4;
+  heading?: string;
+  shopAllHref?: string;
 }
 
-const colClasses = {
-  2: "grid-cols-2",
-  3: "grid-cols-2 md:grid-cols-3",
-  4: "grid-cols-2 md:grid-cols-4",
-};
-
-export function ProductGrid({ products, title, viewAllHref, columns = 4 }: Props) {
+export default function ProductGrid({ products, heading, shopAllHref }: Props) {
   if (!products.length) return null;
 
   return (
-    <section className="py-12 md:py-16">
-      {title && (
-        <div className="container-site mb-8 flex items-center justify-between">
-          <h2 className="text-2xl md:text-[28px] font-bold tracking-tight leading-tight">
-            {title}
-          </h2>
-          {viewAllHref && (
-            <Link
-              href={viewAllHref}
-              className="text-[13px] font-semibold text-[#7B189F] hover:underline transition-colors"
-            >
-              View All
-            </Link>
-          )}
-        </div>
-      )}
+    <section style={{ padding: "48px 0" }}>
       <div className="container-site">
-        <div className={`grid ${colClasses[columns]} gap-x-4 gap-y-10 md:gap-x-6`}>
-          {products.map((product) => (
-            <ProductCard key={product.id} product={product} />
+        {(heading || shopAllHref) && (
+          <div className="flex items-center justify-between" style={{ marginBottom: "24px" }}>
+            {heading && (
+              <h2 style={{ fontSize: "22px", fontWeight: 700, color: "#212121" }}>{heading}</h2>
+            )}
+            {shopAllHref && (
+              <Link
+                href={shopAllHref}
+                style={{
+                  fontSize: "13px",
+                  fontWeight: 700,
+                  color: "#7B189F",
+                  textDecoration: "none",
+                  letterSpacing: "0.02em",
+                }}
+              >
+                Shop All →
+              </Link>
+            )}
+          </div>
+        )}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
+            gap: "16px",
+          }}
+        >
+          {products.map((p) => (
+            <ProductCard key={p.id} product={p} />
           ))}
         </div>
       </div>

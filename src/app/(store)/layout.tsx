@@ -1,14 +1,12 @@
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
-import { CartDrawer } from "@/components/cart/CartDrawer";
+import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
+import CartDrawer from "@/components/cart/CartDrawer";
 
 export default function StoreLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <Header />
-      <main id="MainContent" className="flex-1">
-        {children}
-      </main>
+      <main style={{ flex: 1 }}>{children}</main>
       <Footer />
       <CartDrawer />
     </>
