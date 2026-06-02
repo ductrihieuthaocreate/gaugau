@@ -1,7 +1,8 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { LayoutDashboard, Package, Tag, ShoppingBag, Settings, LogOut } from "lucide-react";
+import { logoutAction } from "@/lib/adminAuth";
 
 const NAV = [
   { label: "Dashboard", href: "/admin", Icon: LayoutDashboard },
@@ -57,7 +58,7 @@ export default function AdminSidebar() {
         ))}
       </nav>
 
-      <div style={{ padding: "16px 20px", borderTop: "1px solid #333" }}>
+      <div style={{ padding: "16px 20px", borderTop: "1px solid #333", display: "flex", flexDirection: "column", gap: "12px" }}>
         <Link
           href="/"
           className="flex items-center"
@@ -65,6 +66,15 @@ export default function AdminSidebar() {
         >
           <LogOut size={15} /> Back to Store
         </Link>
+        <form action={logoutAction}>
+          <button
+            type="submit"
+            className="flex items-center"
+            style={{ gap: "10px", fontSize: "13px", color: "#e55", background: "none", border: "none", cursor: "pointer", padding: 0 }}
+          >
+            <LogOut size={15} /> Sign Out
+          </button>
+        </form>
       </div>
     </aside>
   );

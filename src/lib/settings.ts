@@ -1,4 +1,4 @@
-import { createAdminClient } from "@/lib/supabase/admin";
+﻿import { createClient } from "@/lib/supabase/server";
 import type { HeroSettings } from "@/types";
 
 const DEFAULT_HERO: HeroSettings = {
@@ -12,8 +12,7 @@ const DEFAULT_HERO: HeroSettings = {
 
 export async function getHeroSettings(): Promise<HeroSettings> {
   try {
-    const supabase = createAdminClient();
-    if (!supabase) return DEFAULT_HERO;
+    const supabase = await createClient();
     const { data } = await supabase
       .from("settings")
       .select("value")
@@ -23,4 +22,3 @@ export async function getHeroSettings(): Promise<HeroSettings> {
   } catch {}
   return DEFAULT_HERO;
 }
-

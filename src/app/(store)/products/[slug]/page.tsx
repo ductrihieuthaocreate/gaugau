@@ -1,9 +1,10 @@
-import { notFound } from "next/navigation";
+﻿import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { Star, Truck, RotateCcw, ShieldCheck } from "lucide-react";
-import { getProductBySlug, getProducts } from "@/lib/products";
+import { getProductBySlug, getRelatedProducts } from "@/lib/products";
 import AddToCartButton from "./AddToCartButton";
+import ProductCard from "@/components/product/ProductCard";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -13,17 +14,15 @@ export async function generateMetadata({ params }: Props) {
   const { slug } = await params;
   const product = await getProductBySlug(slug);
   if (!product) return {};
-  return { title: `${product.title} — go2go`, description: product.description };
+  return { title: `${product.title} - go2go`, description: product.description };
 }
 
 export default async function ProductPage({ params }: Props) {
   const { slug } = await params;
-  const [product, related] = await Promise.all([
-    getProductBySlug(slug),
-    getProducts({ limit: 4 }),
-  ]);
-
+  const product = await getProductBySlug(slug);
   if (!product) notFound();
+
+  const related = await getRelatedProducts(product, 4);
 
   const img = product.images?.[0];
   const hasCompare = product.compare_at_price && product.compare_at_price > product.price;
@@ -112,7 +111,7 @@ export default async function ProductPage({ params }: Props) {
 
           {product.images && product.images.length > 1 && (
             <div className="flex" style={{ gap: "8px", marginTop: "12px" }}>
-              {product.images.slice(0, 5).map((img, i) => (
+              {product.images.slice(0, 5).map((pImg, i) => (
                 <div
                   key={i}
                   style={{
@@ -126,8 +125,8 @@ export default async function ProductPage({ params }: Props) {
                   }}
                 >
                   <Image
-                    src={img.url}
-                    alt={img.alt ?? `${product.title} ${i + 1}`}
+                    src={pImg.url}
+                    alt={pImg.alt ?? `${product.title} ${i + 1}`}
                     fill
                     sizes="72px"
                     style={{ objectFit: "cover" }}
@@ -209,7 +208,7 @@ export default async function ProductPage({ params }: Props) {
         </div>
       </div>
 
-      {/* You may also like */}
+      {/* Related products */}
       {related.length > 0 && (
         <section style={{ marginTop: "64px" }}>
           <h2 style={{ fontSize: "20px", fontWeight: 700, marginBottom: "24px" }}>You May Also Like</h2>
@@ -220,27 +219,9 @@ export default async function ProductPage({ params }: Props) {
               gap: "16px",
             }}
           >
-            {related
-              .filter((p) => p.id !== product.id)
-              .slice(0, 4)
-              .map((p) => {
-                const pImg = p.images?.[0];
-                return (
-                  <Link
-                    key={p.id}
-                    href={`/products/${p.slug}`}
-                    style={{ textDecoration: "none", color: "#212121" }}
-                  >
-                    <div style={{ position: "relative", paddingBottom: "100%", background: "#F5F5F5", overflow: "hidden" }}>
-                      {pImg?.url && (
-                        <Image src={pImg.url} alt={pImg.alt ?? p.title} fill sizes="200px" style={{ objectFit: "cover" }} />
-                      )}
-                    </div>
-                    <p style={{ fontSize: "13px", fontWeight: 500, marginTop: "8px", lineHeight: 1.3 }}>{p.title}</p>
-                    <p style={{ fontSize: "14px", fontWeight: 700, marginTop: "4px" }}>${(p.price / 100).toFixed(2)}</p>
-                  </Link>
-                );
-              })}
+            {related.map((p) => (
+              <ProductCard key={p.id} product={p} />
+            ))}
           </div>
         </section>
       )}

@@ -1,31 +1,30 @@
-import HeroBanner from "@/components/home/HeroBanner";
+import HeroCarousel from "@/components/home/HeroCarousel";
+import CategoryCircles from "@/components/home/CategoryCircles";
 import CategoryGrid from "@/components/home/CategoryGrid";
 import OccasionTiles from "@/components/home/OccasionTiles";
-import ProductGrid from "@/components/product/ProductGrid";
-import { getHeroSettings } from "@/lib/settings";
+import ProductCarousel from "@/components/product/ProductCarousel";
 import { getProducts } from "@/lib/products";
 import Link from "next/link";
 
 export default async function HomePage() {
-  const [hero, featured, newArrivals, bestSellers] = await Promise.all([
-    getHeroSettings(),
-    getProducts({ featured: true, limit: 8 }),
-    getProducts({ limit: 8 }),
-    getProducts({ tag: "best-seller", limit: 8 }),
+  const [featured, newArrivals, bestSellers] = await Promise.all([
+    getProducts({ featured: true, limit: 12 }),
+    getProducts({ limit: 12 }),
+    getProducts({ tag: "best-seller", limit: 12 }),
   ]);
 
   return (
     <>
-      <HeroBanner settings={hero} />
+      <HeroCarousel />
 
       {/* Value props bar */}
-      <div style={{ background: "#F9F9F9", borderBottom: "1px solid #E5E5E5", padding: "14px 0" }}>
+      <div style={{ background: "#F9F9F9", borderBottom: "1px solid #E5E5E5", padding: "12px 0" }}>
         <div
           className="container-site"
           style={{
             display: "grid",
             gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
-            gap: "12px",
+            gap: "8px",
           }}
         >
           {[
@@ -46,17 +45,24 @@ export default async function HomePage() {
         </div>
       </div>
 
-      <CategoryGrid />
+      {/* Category circles */}
+      <CategoryCircles />
+
+      {/* Divider */}
+      <div style={{ borderTop: "1px solid #F0F0F0" }} />
 
       {featured.length > 0 && (
-        <ProductGrid
+        <ProductCarousel
           products={featured}
           heading="Featured Picks"
           shopAllHref="/collections/new"
         />
       )}
 
-      {/* Promo banner */}
+      {/* Editorial category grid */}
+      <CategoryGrid />
+
+      {/* Purple promo banner */}
       <div style={{ background: "#7B189F", padding: "56px 16px", textAlign: "center" }}>
         <div className="container-site">
           <p style={{ fontSize: "12px", fontWeight: 700, color: "rgba(255,255,255,0.7)", letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: "12px" }}>
@@ -87,14 +93,14 @@ export default async function HomePage() {
         </div>
       </div>
 
-      <ProductGrid
+      <ProductCarousel
         products={newArrivals}
         heading="New Arrivals"
         shopAllHref="/collections/new"
       />
 
       {bestSellers.length > 0 && (
-        <ProductGrid
+        <ProductCarousel
           products={bestSellers}
           heading="Best Sellers"
           shopAllHref="/collections/best-sellers"

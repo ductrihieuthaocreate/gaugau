@@ -1,5 +1,4 @@
-import { notFound } from "next/navigation";
-import { getProducts, getCategories } from "@/lib/products";
+﻿import { getProducts, getCategories } from "@/lib/products";
 import ProductCard from "@/components/product/ProductCard";
 
 interface Props {
@@ -47,7 +46,7 @@ const SLUG_LABELS: Record<string, string> = {
 export async function generateMetadata({ params }: Props) {
   const { slug } = await params;
   const label = SLUG_LABELS[slug] ?? slug.replace(/-/g, " ");
-  return { title: `${label} — go2go` };
+  return { title: `${label} â€” go2go` };
 }
 
 export default async function CollectionPage({ params }: Props) {
@@ -101,7 +100,7 @@ export default async function CollectionPage({ params }: Props) {
       {products.length === 0 ? (
         <div style={{ textAlign: "center", padding: "80px 0", color: "#888" }}>
           <p style={{ fontSize: "18px", marginBottom: "8px" }}>No products found</p>
-          <p style={{ fontSize: "14px" }}>Check back soon — we&apos;re adding new items all the time.</p>
+          <p style={{ fontSize: "14px" }}>Check back soon â€” we&apos;re adding new items all the time.</p>
         </div>
       ) : (
         <div

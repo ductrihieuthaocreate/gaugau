@@ -1,12 +1,18 @@
-"use server";
+﻿"use server";
 
 import Stripe from "stripe";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { verifyAdminSession } from "@/lib/auth";
 import type { CartItem } from "@/types";
 
 function getStripe() {
   if (!process.env.STRIPE_SECRET_KEY) return null;
   return new Stripe(process.env.STRIPE_SECRET_KEY);
+}
+
+async function requireAdmin() {
+  const isAdmin = await verifyAdminSession();
+  if (!isAdmin) throw new Error("Unauthorized");
 }
 
 export async function createStripeSession(items: CartItem[], origin: string) {
@@ -36,6 +42,7 @@ export async function createStripeSession(items: CartItem[], origin: string) {
 }
 
 export async function getAdminProducts() {
+  await requireAdmin();
   const supabase = createAdminClient();
   if (!supabase) return [];
   const { data } = await supabase
@@ -46,6 +53,7 @@ export async function getAdminProducts() {
 }
 
 export async function getAdminProduct(id: string) {
+  await requireAdmin();
   const supabase = createAdminClient();
   if (!supabase) return null;
   const { data } = await supabase
@@ -69,6 +77,7 @@ export async function upsertProduct(product: {
   featured?: boolean;
   imageUrls?: string[];
 }) {
+  await requireAdmin();
   const supabase = createAdminClient();
   if (!supabase) throw new Error("Admin client unavailable");
 
@@ -91,6 +100,7 @@ export async function upsertProduct(product: {
 }
 
 export async function deleteProduct(id: string) {
+  await requireAdmin();
   const supabase = createAdminClient();
   if (!supabase) throw new Error("Admin client unavailable");
   await supabase.from("product_images").delete().eq("product_id", id);
@@ -98,6 +108,7 @@ export async function deleteProduct(id: string) {
 }
 
 export async function getAdminCategories() {
+  await requireAdmin();
   const supabase = createAdminClient();
   if (!supabase) return [];
   const { data } = await supabase.from("categories").select("*").order("name");
@@ -105,6 +116,7 @@ export async function getAdminCategories() {
 }
 
 export async function upsertCategory(cat: { id?: string; name: string; slug: string; description?: string; image_url?: string }) {
+  await requireAdmin();
   const supabase = createAdminClient();
   if (!supabase) throw new Error("Admin client unavailable");
   const { data, error } = cat.id
@@ -115,12 +127,14 @@ export async function upsertCategory(cat: { id?: string; name: string; slug: str
 }
 
 export async function deleteCategory(id: string) {
+  await requireAdmin();
   const supabase = createAdminClient();
   if (!supabase) throw new Error("Admin client unavailable");
   await supabase.from("categories").delete().eq("id", id);
 }
 
 export async function getAdminOrders() {
+  await requireAdmin();
   const supabase = createAdminClient();
   if (!supabase) return [];
   const { data } = await supabase.from("orders").select("*").order("created_at", { ascending: false });
@@ -128,6 +142,7 @@ export async function getAdminOrders() {
 }
 
 export async function saveHeroSettings(settings: Record<string, unknown>) {
+  await requireAdmin();
   const supabase = createAdminClient();
   if (!supabase) throw new Error("Admin client unavailable");
   await supabase.from("settings").upsert({ key: "hero", value: settings });
